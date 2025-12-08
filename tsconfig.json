@@ -9,6 +9,8 @@
     }
   ],
   "compilerOptions": {
+    "typeRoots": ["./node_modules/@types", "./src/app/styles"],
+    "types": ["styled-components"],
     "target": "ES2020",
     "useDefineForClassFields": true,
     "lib": [
@@ -29,24 +31,13 @@
     /* Absolute imports for FSD */
     "baseUrl": ".",
     "paths": {
-      "@/app/*": [
-        "./src/app/*"
-      ],
-      "@/pages/*": [
-        "./src/pages/*"
-      ],
-      "@/widgets/*": [
-        "./src/widgets/*"
-      ],
-      "@/features/*": [
-        "./src/features/*"
-      ],
-      "@/entities/*": [
-        "./src/entities/*"
-      ],
-      "@/shared/*": [
-        "./src/shared/*"
-      ]
+      "@/*": ["src/*"],
+      "@/app/*": ["src/app/*"],
+      "@/pages/*": ["src/pages/*"],
+      "@/widgets/*": ["src/widgets/*"],
+      "@/features/*": ["src/features/*"],
+      "@/entities/*": ["src/entities/*"],
+      "@/shared/*": ["src/shared/*"]
     },
     /* Linting */
     "strict": true,

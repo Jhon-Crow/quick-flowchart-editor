@@ -1,9 +1,10 @@
-// src/widgets/CanvasWidget/ui/Toolbar/Toolbar.tsx
 import styled from 'styled-components';
-import { Button } from '@/shared/ui/Button';
+import {Button} from "../../../../shared/ui/Button/Button.tsx";
 
 const StyledToolbar = styled.div`
   display: flex;
+  height: 100vh;
+  flex-direction: column;
   gap: 8px;
   padding: 16px;
   background: ${({ theme }) => theme.colors.surface};

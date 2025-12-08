@@ -16,7 +16,7 @@ const StyledNode = styled.div<{ type: 'rectangle' | 'circle' }>`
   user-select: none;
 `;
 
-export const Node = ({ type, x, y, text }: NodeProps) => {
+export const CanvasNode = ({ type, x, y, text }: NodeProps) => {
     return (
         <StyledNode type={type} style={{ left: x, top: y }}>
             {text}

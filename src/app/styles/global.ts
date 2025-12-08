@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
+import type {Theme} from "./theme.ts";
 
 export const GlobalStyle = createGlobalStyle`
   * {
@@ -12,9 +13,9 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    font-family: ${({ theme }) => theme.typography.fontFamily};
-    color: ${({ theme }) => theme.colors.text.primary};
-    background-color: ${({ theme }) => theme.colors.background};
+    font-family: ${({ theme }: {theme: Theme}) => theme.typography.fontFamily};
+    color: ${({ theme }: {theme: Theme}) => theme.colors.text.primary};
+    background-color: ${({ theme }: {theme: Theme}) => theme.colors.background};
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
