@@ -69,7 +69,7 @@ export default tseslint.config(
     'import/named': 'error',
     'import/default': 'error',
     'import/namespace': 'error',
-
+    "fsd-import/fsd-relative-path": "error",
     // Правила сортировки импортов
     'import/order': [
       'error',
