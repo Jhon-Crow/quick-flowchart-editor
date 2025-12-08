@@ -1,20 +1,28 @@
 import styled from 'styled-components';
+import {useCanvasStore} from "../../../../entities/Node/model/store/useCanvasStore.ts";
 import {CanvasNode} from "../../../../entities/Node/ui/Node/CanvasNode.tsx";
-import type {Theme} from "../../../../app/styles";
+
+export const Canvas = () => {
+    const { nodes, clearSelection } = useCanvasStore();
+
+    const handleCanvasClick = () => {
+        clearSelection();
+    };
+
+    return (
+        <StyledCanvas onClick={handleCanvasClick}>
+            {nodes.map((node) => (
+                <CanvasNode key={node.id} node={node} />
+            ))}
+        </StyledCanvas>
+    );
+};
 
 const StyledCanvas = styled.div`
   flex: 1;
   position: relative;
-  background: ${({theme}: {theme: Theme}) => theme.colors.background};
+  background: ${({ theme }) => theme.colors.background};
   min-height: 600px;
+  cursor: default;
+  overflow: hidden;
 `;
-
-export const Canvas = () => {
-    return (
-        <StyledCanvas id="canvas">
-            {/* Здесь будут рендериться Node компоненты */}
-            <CanvasNode type="rectangle" x={100} y={100} text="Прямоугольник"/>
-            <CanvasNode type="circle" x={200} y={200} text="Круг"/>
-        </StyledCanvas>
-    );
-};
