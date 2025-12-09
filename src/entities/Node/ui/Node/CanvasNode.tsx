@@ -56,12 +56,13 @@ export const CanvasNode = ({node}: NodeProps) => {
 const StyledNode = styled.div<{
     type: 'rectangle' | 'circle';
     isSelected: boolean;
+    isDragging: boolean;
 }>`
   position: absolute;
   background: ${({theme, isSelected}) =>
           isSelected ? theme.colors.primary : theme.colors.secondary};
   border-radius: ${({type}) => (type === 'circle' ? '50%' : '8px')};
-  display: flex;
+  display: ${({isDragging}) => isDragging ? 'none' : 'flex'};
   align-items: center;
   justify-content: center;
   color: white;
