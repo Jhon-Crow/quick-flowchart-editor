@@ -34,6 +34,7 @@ export const CanvasNode = ({node}: NodeProps) => {
 
     return (
         <StyledNode
+            // @ts-expect-error: react-dnd ref type conflict
             ref={dragRef}
             isDragging={isDragging}
             type={node.type}
