@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+import {create} from 'zustand';
 import type {ArrowType, CanvasArrowType, CanvasNodeType, CanvasStore, NodeType} from '../types';
 // todo проверить лишние ререндеры, если есть добавить мидлвеер для zustand
 
@@ -17,11 +17,14 @@ export const useCanvasStore = create<CanvasStore>((set) => ({
             width: type === 'rectangle' ? 120 : 80,
             height: type === 'rectangle' ? 80 : 80,
             text: type === 'rectangle' ? 'Прямоугольник' : 'Круг',
-            isSelected: false,
+            isSelected: true,
         };
 
         set((state) => ({
-            nodes: [...state.nodes, newNode],
+            nodes: [...state.nodes.map((node) => ({
+                ...node,
+                isSelected: false,
+            })), newNode],
             selectedNodeId: newNode.id,
         }));
     },
@@ -29,7 +32,7 @@ export const useCanvasStore = create<CanvasStore>((set) => ({
     updateNodePosition: (id: string, x: number, y: number) => {
         set((state) => ({
             nodes: state.nodes.map((node) =>
-                node.id === id ? { ...node, x, y } : node
+                node.id === id ? {...node, x, y} : node
             ),
         }));
     },
@@ -69,7 +72,7 @@ export const useCanvasStore = create<CanvasStore>((set) => ({
     updateNodeText: (id: string, text: string) => {
         set((state) => ({
             nodes: state.nodes.map((node) =>
-                node.id === id ? { ...node, text } : node
+                node.id === id ? {...node, text} : node
             ),
         }));
     },
@@ -109,7 +112,7 @@ export const useCanvasStore = create<CanvasStore>((set) => ({
     updateArrowType: (id: string, type: ArrowType) => {
         set((state) => ({
             arrows: state.arrows.map((arrow) =>
-                arrow.id === id ? { ...arrow, type } : arrow
+                arrow.id === id ? {...arrow, type} : arrow
             ),
         }));
     },
@@ -117,7 +120,7 @@ export const useCanvasStore = create<CanvasStore>((set) => ({
     updateArrowSource: (id: string, sourceId: string) => {
         set((state) => ({
             arrows: state.arrows.map((arrow) =>
-                arrow.id === id ? { ...arrow, sourceId } : arrow
+                arrow.id === id ? {...arrow, sourceId} : arrow
             ),
         }));
     },
@@ -125,7 +128,7 @@ export const useCanvasStore = create<CanvasStore>((set) => ({
     updateArrowTarget: (id: string, targetId: string) => {
         set((state) => ({
             arrows: state.arrows.map((arrow) =>
-                arrow.id === id ? { ...arrow, targetId } : arrow
+                arrow.id === id ? {...arrow, targetId} : arrow
             ),
         }));
     },
