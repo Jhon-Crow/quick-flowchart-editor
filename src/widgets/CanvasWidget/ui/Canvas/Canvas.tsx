@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import {useCanvasStore} from "../../../../entities/Node/model/store/useCanvasStore.ts";
-import {CanvasNode} from "../../../../entities/Node/ui/Node/CanvasNode.tsx";
+import {useCanvasStore} from "@/entities/Node";
+import {Node} from "@/entities/Node";
 
 export const Canvas = () => {
     const { nodes, clearSelection } = useCanvasStore();
@@ -12,7 +12,7 @@ export const Canvas = () => {
     return (
         <StyledCanvas onClick={handleCanvasClick}>
             {nodes.map((node) => (
-                <CanvasNode key={node.id} node={node} />
+                <Node key={node.id} node={node} />
             ))}
         </StyledCanvas>
     );

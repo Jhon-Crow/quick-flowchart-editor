@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import {useCanvasStore} from "../../../../entities/Node/model/store/useCanvasStore.ts";
-import {Button} from "../../../../shared/ui/Button/Button.tsx";
+import {useCanvasStore} from "@/entities/Node";
+import {Button} from "@/shared/Button";
 
 export const Toolbar = () => {
     const {
@@ -28,6 +28,7 @@ export const Toolbar = () => {
         // В этом режиме выбор происходит по клику на элемент
         // Эта кнопка может переключать режим или просто быть информативной
         console.log('Режим выбора активен (кликайте на элементы)');
+        // todo доделать либо удалить
     };
 
     const selectedNode = nodes.find(node => node.id === selectedNodeId);

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import {CanvasWidget} from "../../../widgets/CanvasWidget";
+import {CanvasWidget} from "@/widgets/CanvasWidget";
 
 export const MainPage = () => {
     return (

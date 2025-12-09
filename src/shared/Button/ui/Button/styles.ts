@@ -1,6 +1,6 @@
 // src/shared/ui/Button/styles.ts
 import styled, { css, keyframes } from 'styled-components';
-import type { ButtonVariant, ButtonSize } from './types';
+import type { ButtonVariant, ButtonSize } from './types.ts';
 
 const spin = keyframes`
   0% { transform: rotate(0deg); }

@@ -1,5 +1,5 @@
 import {AppProviders} from "./providers/AppProviders.tsx";
-import {MainPage} from "../pages/MainPage/ui/MainPage.tsx";
+import {MainPage} from "@/pages/MainPage";
 
 function App() {
 

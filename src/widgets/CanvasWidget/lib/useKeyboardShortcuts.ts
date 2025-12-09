@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import {useCanvasStore} from "../../../entities/Node/model/store/useCanvasStore.ts";
+import {useCanvasStore} from "@/entities/Node";
 
 export const useKeyboardShortcuts = () => {
     const { deleteNode, selectedNodeId } = useCanvasStore();
@@ -14,6 +14,7 @@ export const useKeyboardShortcuts = () => {
 
             // Отмена выбора по Escape
             if (e.key === 'Escape') {
+                // todo доделать либо удалить
                 // Очистка выделения уже есть в клике на Canvas
             }
         };
