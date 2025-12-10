@@ -1,7 +1,6 @@
 import {create} from 'zustand';
 import type {ArrowType, CanvasArrowType, CanvasNodeType, CanvasStore, NodeType} from '../types';
 import {persist} from "zustand/middleware";
-// todo проверить лишние ререндеры, если есть добавить shallow в используемые хуки
 
 export const useCanvasStore = create(
     persist<CanvasStore>(

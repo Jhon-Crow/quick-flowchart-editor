@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import {useCanvasStore} from '../../../Node/model/store/useCanvasStore';
-import type {ArrowType, CanvasArrowType} from "../../../Node/model/types.ts";
+import type {ArrowType, CanvasArrowType} from "../../../Node";
+import {useCanvasStore} from '../../../Node';
 
 interface ArrowProps {
     arrow: CanvasArrowType;

@@ -1,8 +1,8 @@
 import styled from 'styled-components';
+import type {ArrowType} from "@/entities/Node";
 import {useCanvasStore} from "@/entities/Node";
 import {Button} from "@/shared/Button";
 import React, {useEffect, useRef, useState} from "react";
-import type {ArrowType} from "@/entities/Node/model/types.ts";
 
 export const Toolbar = () => {
     const {
