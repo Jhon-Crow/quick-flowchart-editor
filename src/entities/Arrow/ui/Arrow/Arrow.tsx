@@ -13,11 +13,35 @@ export const Arrow = ({arrow}: ArrowProps) => {
 
     if (!sourceNode || !targetNode) return null;
 
+    function countSourceX(){
+        if (sourceNode!.x == targetNode!.x) return sourceNode!.x + sourceNode!.width / 2;
+        if (sourceNode!.x < targetNode!.x) return sourceNode!.x + sourceNode!.width;
+        if (sourceNode!.x > targetNode!.x) return sourceNode!.x;
+    }
+
+    function countTargetX(){
+        if (targetNode!.x == sourceNode!.x) return targetNode!.x + targetNode!.width / 2;
+        if (targetNode!.x < sourceNode!.x) return targetNode!.x + targetNode!.width;
+        if (targetNode!.x > sourceNode!.x) return targetNode!.x;
+    }
+
+
+    function countSourceY(){
+        if (sourceNode!.y == targetNode!.y) return sourceNode!.y + sourceNode!.height / 2;
+        if (sourceNode!.y < targetNode!.y) return sourceNode!.y + sourceNode!.height / 1.5;
+        if (sourceNode!.y > targetNode!.y) return sourceNode!.y + sourceNode!.height / 4;
+    }
+
+    function countTargetY(){
+        if (targetNode!.y == sourceNode!.y) return targetNode!.y + targetNode!.height / 2;
+        if (targetNode!.y < sourceNode!.y) return targetNode!.y + targetNode!.height / 1.5;
+        if (targetNode!.y > sourceNode!.y) return targetNode!.y + targetNode!.height / 4;
+    }
     // Координаты центров узлов
-    const x1 = sourceNode.x + sourceNode.width / 2;
-    const y1 = sourceNode.y + sourceNode.height / 2;
-    const x2 = targetNode.x + targetNode.width / 2;
-    const y2 = targetNode.y + targetNode.height / 2;
+    const x1 = countSourceX();
+    const y1 = countSourceY();
+    const x2 = countTargetX();
+    const y2 = countTargetY();
 
     return (
         <StyledLine
@@ -34,7 +58,7 @@ export const Arrow = ({arrow}: ArrowProps) => {
 const StyledLine = styled.line<{ arrowType: ArrowType }>`
   stroke: ${({theme, arrowType}) =>
           arrowType === 'directional' ? theme.colors.primary :
-                  arrowType === 'bidirectional' ? theme.colors.secondary :
+                  arrowType === 'bidirectional' ? theme.colors.warning :
                           theme.colors.border};
   stroke-width: 2;
   marker-end: ${({arrowType}) =>
