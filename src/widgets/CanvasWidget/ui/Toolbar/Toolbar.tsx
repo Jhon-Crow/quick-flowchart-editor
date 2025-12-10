@@ -1,18 +1,21 @@
 import styled from 'styled-components';
 import {useCanvasStore} from "@/entities/Node";
 import {Button} from "@/shared/Button";
-import {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import type {ArrowType} from "@/entities/Node/model/types.ts";
 
 export const Toolbar = () => {
     const {
         addNode,
+        updateNodeText,
         deleteNode,
         selectedNodeId,
+        clearSelection,
         nodes,
         addArrow,
     } = useCanvasStore();
 
+    const ref = useRef<HTMLInputElement | null>(null);
 
     const [isArrowMode, setIsArrowMode] = useState(false);
 
@@ -22,14 +25,23 @@ export const Toolbar = () => {
     const [sourceId, setSourceId] = useState<string | null>(null);
     const [arrowType, setArrowType] = useState<ArrowType | null>(null);
 
+    const handleEditNodeText = () => {
+        if (selectedNodeId && ref.current) {
+            updateNodeText(selectedNodeId, ref.current.value || '');
+        }
+    };
+
     const handleAddSimpleArrow = (e: React.MouseEvent) => {
         e.preventDefault();
+        clearSelection();
         setAddSimpleArrowActive(true);
         setArrowType("directional");
         setIsArrowMode(true);
     };
 
-    const handleAddDoubleArrow = () => {
+    const handleAddDoubleArrow = (e: React.MouseEvent) => {
+        e.preventDefault();
+        clearSelection();
         setAddDoubleArrowActive(true);
         setArrowType("bidirectional");
         setIsArrowMode(true);
@@ -89,7 +101,23 @@ export const Toolbar = () => {
                     variant="secondary">
                     ↔ Добавить двойную стрелку
                 </Button>
-                {/*todo добавить кнопку отмены добавления стрелки*/}
+
+                <input
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                            handleEditNodeText();
+                        }
+                    }}
+                    disabled={!selectedNodeId}
+                    placeholder={'Изменить текст выбранного элемента'} type={'text'}
+                    ref={ref}/>
+                <Button
+                    onClick={handleEditNodeText}
+                    variant={'ghost'}
+                    disabled={!selectedNodeId}>
+                    📝 Редактировать текст
+                </Button>
+
                 <Button
                     onClick={handleDelete}
                     variant="danger"
