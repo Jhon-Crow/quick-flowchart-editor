@@ -43,5 +43,3 @@ export interface CanvasStore {
 
     clearSelection: () => void;
 }
-
-export type NodeProps = Omit<CanvasNodeType, 'id'>; //todo удалить если не понадобится
