@@ -1,7 +1,7 @@
 import {create} from 'zustand';
 import type {ArrowType, CanvasArrowType, CanvasNodeType, CanvasStore, NodeType} from '../types';
 import {persist} from "zustand/middleware";
-// todo проверить лишние ререндеры, если есть добавить мидлвеер для zustand
+// todo проверить лишние ререндеры, если есть добавить shallow в используемые хуки
 
 export const useCanvasStore = create(
     persist<CanvasStore>(
@@ -81,7 +81,7 @@ export const useCanvasStore = create(
             },
 
             // Экшены для стрелок
-            addArrow: (sourceId: string, targetId: string, type: ArrowType) => {
+            addArrow: (type: ArrowType, sourceId: string, targetId: string) => {
                 const newArrow: CanvasArrowType = {
                     id: `arrow-${crypto.randomUUID()}`,
                     sourceId,

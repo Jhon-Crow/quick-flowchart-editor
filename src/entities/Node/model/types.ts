@@ -19,27 +19,29 @@ export interface CanvasArrowType {
     type: ArrowType;
 }
 
-export interface CanvasStore {
-    // Состояние
+// Определите отдельно тип состояния (только данные)
+interface CanvasState {
     nodes: CanvasNodeType[];
     arrows: CanvasArrowType[];
     selectedNodeId: string | null;
     selectedArrowId: string | null;
+}
 
-    // Действия с нодами
+// Определите тип действий отдельно
+interface CanvasActions {
     addNode: (type: NodeType, x: number, y: number) => void;
-    deleteNode: (id: string) => void;
-    selectNode: (id: string | null) => void;
     updateNodePosition: (id: string, x: number, y: number) => void;
+    selectNode: (id: string | null) => void;
+    deleteNode: (id: string) => void;
+    clearSelection: () => void;
     updateNodeText: (id: string, text: string) => void;
-
-    // Действия со стрелками
-    addArrow: (sourceId: string, targetId: string, type: ArrowType) => void;
+    addArrow: (type: ArrowType, sourceId: string, targetId: string) => void;
     deleteArrow: (id: string) => void;
     selectArrow: (id: string | null) => void;
     updateArrowType: (id: string, type: ArrowType) => void;
     updateArrowSource: (id: string, sourceId: string) => void;
     updateArrowTarget: (id: string, targetId: string) => void;
-
-    clearSelection: () => void;
 }
+
+// Объедините типы для хранилища
+export type CanvasStore = CanvasState & CanvasActions;
