@@ -1,6 +1,6 @@
 import React from 'react';
-import type { ButtonProps } from './types.ts';
-import { StyledButton, Loader, ButtonContent } from './styles.ts';
+import type {ButtonProps} from './types.ts';
+import {ButtonContent, Loader, StyledButton} from './styles.ts';
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     (
@@ -9,6 +9,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             variant = 'primary',
             size = 'md',
             isLoading = false,
+            isActive = false,
             fullWidth = false,
             disabled,
             className,
@@ -27,6 +28,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
                 size={size}
                 disabled={isDisabled}
                 isLoading={isLoading}
+                isActive={isActive}
                 fullWidth={fullWidth}
                 className={className}
                 aria-busy={isLoading}

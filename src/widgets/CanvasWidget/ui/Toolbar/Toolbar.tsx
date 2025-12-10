@@ -1,14 +1,54 @@
 import styled from 'styled-components';
 import {useCanvasStore} from "@/entities/Node";
 import {Button} from "@/shared/Button";
+import {useEffect, useState} from "react";
+import type {ArrowType} from "@/entities/Node/model/types.ts";
 
 export const Toolbar = () => {
     const {
         addNode,
         deleteNode,
         selectedNodeId,
-        nodes
+        nodes,
+        addArrow,
     } = useCanvasStore();
+
+
+    const [isArrowMode, setIsArrowMode] = useState(false);
+
+    const [addSimpleArrowActive, setAddSimpleArrowActive] = useState(false);
+    const [addDoubleArrowActive, setAddDoubleArrowActive] = useState(false);
+
+    const [sourceId, setSourceId] = useState<string | null>(null);
+    const [arrowType, setArrowType] = useState<ArrowType | null>(null);
+
+    const handleAddSimpleArrow = (e: React.MouseEvent) => {
+        e.preventDefault();
+        setAddSimpleArrowActive(true);
+        setArrowType("directional");
+        setIsArrowMode(true);
+    };
+
+    const handleAddDoubleArrow = () => {
+        setAddDoubleArrowActive(true);
+        setArrowType("bidirectional");
+        setIsArrowMode(true);
+    };
+
+    useEffect(() => {
+        if (isArrowMode) {
+            if (!sourceId) {
+                setSourceId(selectedNodeId);
+            } else {
+                if (arrowType && selectedNodeId) addArrow(arrowType, sourceId, selectedNodeId);
+                setArrowType(null);
+                setSourceId(null);
+                setIsArrowMode(false);
+                setAddSimpleArrowActive(false);
+                setAddDoubleArrowActive(false);
+            }
+        }
+    }, [selectedNodeId]);
 
     const handleAddRectangle = () => {
         addNode('rectangle', 100, 100);
@@ -24,13 +64,6 @@ export const Toolbar = () => {
         }
     };
 
-    const handleSelect = () => {
-        // В этом режиме выбор происходит по клику на элемент
-        // Эта кнопка может переключать режим или просто быть информативной
-        console.log('Режим выбора активен (кликайте на элементы)');
-        // todo доделать либо удалить
-    };
-
     const selectedNode = nodes.find(node => node.id === selectedNodeId);
 
     return (
@@ -42,9 +75,21 @@ export const Toolbar = () => {
                 <Button onClick={handleAddCircle} variant="primary">
                     ○ Добавить круг
                 </Button>
-                <Button onClick={handleSelect} variant="secondary">
-                    ✏ Выбрать
+                <Button
+                    isActive={addSimpleArrowActive}
+                    disabled={isArrowMode}
+                    onClick={handleAddSimpleArrow}
+                    variant="secondary">
+                    → Добавить стрелку
                 </Button>
+                <Button
+                    isActive={addDoubleArrowActive}
+                    disabled={isArrowMode}
+                    onClick={handleAddDoubleArrow}
+                    variant="secondary">
+                    ↔ Добавить двойную стрелку
+                </Button>
+                {/*todo добавить кнопку отмены добавления стрелки*/}
                 <Button
                     onClick={handleDelete}
                     variant="danger"
@@ -73,8 +118,8 @@ const StyledToolbar = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 12px 16px;
-  background: ${({ theme }) => theme.colors.surface};
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+  background: ${({theme}) => theme.colors.surface};
+  border-bottom: 1px solid ${({theme}) => theme.colors.border};
   flex-wrap: wrap;
   gap: 16px;
 `;
@@ -88,12 +133,12 @@ const ToolbarSection = styled.div`
 const InfoPanel = styled.div`
   display: flex;
   gap: 16px;
-  color: ${({ theme }) => theme.colors.text.secondary};
+  color: ${({theme}) => theme.colors.text.secondary};
   font-size: 14px;
 `;
 
 const InfoText = styled.span`
   padding: 4px 8px;
-  background: ${({ theme }) => theme.colors.background};
+  background: ${({theme}) => theme.colors.background};
   border-radius: 4px;
 `;

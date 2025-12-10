@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { Toolbar } from './Toolbar/Toolbar';
-import { Canvas } from './Canvas/Canvas';
-import { useKeyboardShortcuts } from '../lib/useKeyboardShortcuts';
+import {Toolbar} from './Toolbar/Toolbar';
+import {Canvas} from './Canvas/Canvas';
+import {useKeyboardShortcuts} from '../lib/useKeyboardShortcuts';
 
 export const CanvasWidget = () => {
     useKeyboardShortcuts();

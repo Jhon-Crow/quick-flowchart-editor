@@ -1,6 +1,6 @@
 // src/shared/ui/Button/styles.ts
-import styled, { css, keyframes } from 'styled-components';
-import type { ButtonVariant, ButtonSize } from './types.ts';
+import styled, {css, keyframes} from 'styled-components';
+import type {ButtonSize, ButtonVariant} from './types.ts';
 
 const spin = keyframes`
   0% { transform: rotate(0deg); }
@@ -84,6 +84,7 @@ interface StyledButtonProps {
     variant: ButtonVariant;
     size: ButtonSize;
     isLoading: boolean;
+    isActive: boolean;
     fullWidth: boolean;
 }
 
@@ -125,6 +126,12 @@ export const StyledButton = styled.button<StyledButtonProps>`
       cursor: wait;
       opacity: 0.8;
     `}
+  
+  ${({ isActive }) =>
+          isActive &&
+          css`
+            background-color: coral;
+          `}
 `;
 
 interface LoaderProps {
