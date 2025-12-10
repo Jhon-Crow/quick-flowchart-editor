@@ -11,9 +11,6 @@ export const Toolbar = () => {
         selectedNodeId,
         nodes,
         addArrow,
-        deleteArrow,
-        selectedArrowId,
-        arrows
     } = useCanvasStore();
 
 
@@ -67,13 +64,6 @@ export const Toolbar = () => {
         }
     };
 
-    const handleSelect = () => {
-        // В этом режиме выбор происходит по клику на элемент
-        // Эта кнопка может переключать режим или просто быть информативной
-        console.log('Режим выбора активен (кликайте на элементы)');
-        // todo доделать либо удалить
-    };
-
     const selectedNode = nodes.find(node => node.id === selectedNodeId);
 
     return (
@@ -85,10 +75,6 @@ export const Toolbar = () => {
                 <Button onClick={handleAddCircle} variant="primary">
                     ○ Добавить круг
                 </Button>
-                <Button onClick={handleSelect} variant="secondary">
-                    ✏ Выбрать
-                </Button>
-
                 <Button
                     isActive={addSimpleArrowActive}
                     disabled={isArrowMode}

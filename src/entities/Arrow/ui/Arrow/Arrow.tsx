@@ -56,13 +56,22 @@ export const Arrow = ({arrow}: ArrowProps) => {
 };
 
 const StyledLine = styled.line<{ arrowType: ArrowType }>`
-  stroke: ${({theme, arrowType}) =>
-          arrowType === 'directional' ? theme.colors.primary :
-                  arrowType === 'bidirectional' ? theme.colors.warning :
-                          theme.colors.border};
+  stroke: ${({theme }) => theme.colors.primary};
   stroke-width: 2;
-  marker-end: ${({arrowType}) =>
-          arrowType === 'directional' || arrowType === 'bidirectional' ?
-                  'url(#arrowhead)' : 'none'};
+  /* Для однонаправленных стрелок - наконечник только в конце */
+  ${({ arrowType }) =>
+          arrowType === 'directional' &&
+          `
+    marker-end: url(#arrowhead);
+  `}
+
+    /* Для двунаправленных стрелок - наконечники в начале и в конце */
+  ${({ arrowType }) =>
+          arrowType === 'bidirectional' &&
+          `
+    marker-end: url(#arrowhead);
+    marker-start: url(#arrowhead);
+  `}
+
   cursor: pointer;
 `;
