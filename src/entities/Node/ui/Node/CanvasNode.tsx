@@ -2,13 +2,16 @@ import styled from 'styled-components';
 import type {CanvasNodeType} from '../../model/types';
 import {useCanvasStore} from '../../model/store/useCanvasStore';
 import {useDrag} from "react-dnd";
+import {memo} from "react";
 
 interface NodeProps {
     node: CanvasNodeType;
 }
 
 export const CanvasNode = ({node}: NodeProps) => {
-    const {selectNode, updateNodePosition} = useCanvasStore();
+
+    const selectNode = useCanvasStore((state) => state.selectNode);
+    const updateNodePosition = useCanvasStore((state) => state.updateNodePosition);
 
     const handleClick = (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -83,3 +86,5 @@ const StyledNode = styled.div<{
     opacity: 0.9;
   }
 `;
+
+export const Node = memo(CanvasNode)

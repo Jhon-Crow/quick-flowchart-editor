@@ -2,17 +2,17 @@ import styled from 'styled-components';
 import {Toolbar} from './Toolbar/Toolbar';
 import {Canvas} from './Canvas/Canvas';
 import {useKeyboardShortcuts} from '../lib/useKeyboardShortcuts';
+import {memo} from "react";
 
-export const CanvasWidget = () => {
+export const CanvasWidget = memo( () => {
     useKeyboardShortcuts();
-
     return (
         <WidgetContainer>
             <Toolbar />
             <Canvas />
         </WidgetContainer>
     );
-};
+} );
 
 const WidgetContainer = styled.div`
   display: flex;

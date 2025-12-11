@@ -1,10 +1,19 @@
 import styled from 'styled-components';
 import {Node, useCanvasStore} from "@/entities/Node";
 import {Arrow} from "@/entities/Arrow/ui/Arrow/Arrow.tsx";
+import {useShallow} from "zustand/react/shallow";
+import {memo} from "react";
 
-export const Canvas = () => {
-    const {nodes, arrows, clearSelection} = useCanvasStore();
-
+const CanvasComponent = () => {
+    const { nodes, arrows, clearSelection } = useCanvasStore(
+        useShallow((state) => ({
+            nodes: state.nodes,
+            arrows: state.arrows,
+            selectedNodeId: state.selectedNodeId,
+            selectedArrowId: state.selectedArrowId,
+            clearSelection: state.clearSelection,
+        }))
+    );
     const handleCanvasClick = () => {
         clearSelection();
     };
@@ -36,3 +45,5 @@ const StyledCanvas = styled.div`
   cursor: default;
   overflow: hidden;
 `;
+
+export const Canvas = memo(CanvasComponent);

@@ -1,7 +1,6 @@
 import {create} from 'zustand';
 import type {ArrowType, CanvasArrowType, CanvasNodeType, CanvasStore, NodeType} from '../types';
 import {persist} from "zustand/middleware";
-// todo проверить лишние ререндеры, если есть добавить shallow в используемые хуки
 
 export const useCanvasStore = create(
     persist<CanvasStore>(
@@ -52,13 +51,15 @@ export const useCanvasStore = create(
 
             deleteNode: (id: string) => {
                 set((state) => ({
+                    arrows: state.arrows.filter((arrow) => arrow.sourceId !== id && arrow.targetId !== id),
                     nodes: state.nodes.filter((node) => node.id !== id),
                     selectedNodeId: state.selectedNodeId === id ? null : state.selectedNodeId,
                 }));
             },
 
             clearSelection: () => {
-                set((state) => ({
+                set((state) => state.selectedNodeId || state.selectedArrowId ? (
+                    {
                     nodes: state.nodes.map((node) => ({
                         ...node,
                         isSelected: false,
@@ -69,7 +70,7 @@ export const useCanvasStore = create(
                     })),
                     selectedNodeId: null,
                     selectedArrowId: null,
-                }));
+                }): state);
             },
 
             updateNodeText: (id: string, text: string) => {

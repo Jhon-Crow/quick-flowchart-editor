@@ -1,8 +1,8 @@
-import React from 'react';
+import React, {memo} from 'react';
 import type {ButtonProps} from './types.ts';
 import {ButtonContent, Loader, StyledButton} from './styles.ts';
 
-export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+export const Button = memo( React.forwardRef<HTMLButtonElement, ButtonProps>(
     (
         {
             children,
@@ -39,6 +39,6 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             </StyledButton>
         );
     }
-);
+) );
 
 Button.displayName = 'Button';
