@@ -13,6 +13,7 @@ export const Toolbar = () => {
         clearSelection,
         nodes,
         addArrow,
+        arrows
     } = useCanvasStore();
 
     const ref = useRef<HTMLInputElement | null>(null);
@@ -52,7 +53,8 @@ export const Toolbar = () => {
             if (!sourceId) {
                 setSourceId(selectedNodeId);
             } else {
-                if (arrowType && selectedNodeId) addArrow(arrowType, sourceId, selectedNodeId);
+                const isArrowExists = arrows.some((arrow) => arrow.sourceId === sourceId && arrow.targetId === selectedNodeId);
+                if (arrowType && selectedNodeId && !isArrowExists) addArrow(arrowType, sourceId, selectedNodeId);
                 setArrowType(null);
                 setSourceId(null);
                 setIsArrowMode(false);
