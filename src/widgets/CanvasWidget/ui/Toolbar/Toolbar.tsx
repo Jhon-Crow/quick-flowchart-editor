@@ -2,9 +2,10 @@ import styled from 'styled-components';
 import type {ArrowType} from "@/entities/Node";
 import {useCanvasStore} from "@/entities/Node";
 import {Button} from "@/shared/Button";
-import React, {useEffect, useRef, useState} from "react";
+import React, {memo, useCallback, useEffect, useRef, useState} from "react";
+import {useShallow} from "zustand/react/shallow";
 
-export const Toolbar = () => {
+const ToolbarComponent = () => {
     const {
         addNode,
         updateNodeText,
@@ -14,8 +15,18 @@ export const Toolbar = () => {
         nodes,
         addArrow,
         arrows
-    } = useCanvasStore();
-
+    } = useCanvasStore(
+        useShallow((state) => ({
+            addNode: state.addNode,
+            updateNodeText: state.updateNodeText,
+            deleteNode: state.deleteNode,
+            selectedNodeId: state.selectedNodeId,
+            clearSelection: state.clearSelection,
+            nodes: state.nodes,
+            addArrow: state.addArrow,
+            arrows: state.arrows,
+        }))
+    );
     const ref = useRef<HTMLInputElement | null>(null);
 
     const [isArrowMode, setIsArrowMode] = useState(false);
@@ -26,27 +37,27 @@ export const Toolbar = () => {
     const [sourceId, setSourceId] = useState<string | null>(null);
     const [arrowType, setArrowType] = useState<ArrowType | null>(null);
 
-    const handleEditNodeText = () => {
+    const handleEditNodeText = useCallback(() => {
         if (selectedNodeId && ref.current) {
             updateNodeText(selectedNodeId, ref.current.value || '');
         }
-    };
+    }, [selectedNodeId, updateNodeText]);
 
-    const handleAddSimpleArrow = (e: React.MouseEvent) => {
+    const handleAddSimpleArrow = useCallback((e: React.MouseEvent) => {
         e.preventDefault();
         clearSelection();
         setAddSimpleArrowActive(true);
         setArrowType("directional");
         setIsArrowMode(true);
-    };
+    }, [clearSelection]);
 
-    const handleAddDoubleArrow = (e: React.MouseEvent) => {
+    const handleAddDoubleArrow = useCallback((e: React.MouseEvent) => {
         e.preventDefault();
         clearSelection();
         setAddDoubleArrowActive(true);
         setArrowType("bidirectional");
         setIsArrowMode(true);
-    };
+    }, [clearSelection]);
 
     useEffect(() => {
         if (isArrowMode) {
@@ -64,19 +75,19 @@ export const Toolbar = () => {
         }
     }, [selectedNodeId]);
 
-    const handleAddRectangle = () => {
+    const handleAddRectangle = useCallback(() => {
         addNode('rectangle', 100, 100);
-    };
+    }, [addNode]);
 
-    const handleAddCircle = () => {
+    const handleAddCircle = useCallback(() => {
         addNode('circle', 250, 150);
-    };
+    }, [addNode]);
 
-    const handleDelete = () => {
+    const handleDelete = useCallback(() => {
         if (selectedNodeId) {
             deleteNode(selectedNodeId);
         }
-    };
+    }, [deleteNode, selectedNodeId]);
 
     const selectedNode = nodes.find(node => node.id === selectedNodeId);
 
@@ -172,3 +183,5 @@ const InfoText = styled.span`
   background: ${({theme}) => theme.colors.background};
   border-radius: 4px;
 `;
+
+export const Toolbar = memo(ToolbarComponent);

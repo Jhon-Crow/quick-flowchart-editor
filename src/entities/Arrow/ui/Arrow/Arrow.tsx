@@ -1,15 +1,16 @@
 import styled from 'styled-components';
 import type {ArrowType, CanvasArrowType} from "../../../Node";
 import {useCanvasStore} from '../../../Node';
+import {memo} from "react";
 
 interface ArrowProps {
     arrow: CanvasArrowType;
 }
 
-export const Arrow = ({arrow}: ArrowProps) => {
-    const {nodes, selectArrow} = useCanvasStore();
-    const sourceNode = nodes.find(n => n.id === arrow.sourceId);
-    const targetNode = nodes.find(n => n.id === arrow.targetId);
+export const Arrow = memo( ({arrow}: ArrowProps) => {
+    const selectArrow = useCanvasStore((state) => state.selectArrow);
+    const sourceNode = useCanvasStore(state => state.nodes.find(n => n.id === arrow.sourceId));
+    const targetNode = useCanvasStore(state => state.nodes.find(n => n.id === arrow.targetId));
 
     if (!sourceNode || !targetNode) return null;
 
@@ -53,7 +54,7 @@ export const Arrow = ({arrow}: ArrowProps) => {
             }}
         />
     );
-};
+} );
 
 const StyledLine = styled.line<{ arrowType: ArrowType }>`
   stroke: ${({theme }) => theme.colors.primary};
