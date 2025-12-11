@@ -58,7 +58,8 @@ export const useCanvasStore = create(
             },
 
             clearSelection: () => {
-                set((state) => ({
+                set((state) => state.selectedNodeId || state.selectedArrowId ? (
+                    {
                     nodes: state.nodes.map((node) => ({
                         ...node,
                         isSelected: false,
@@ -69,7 +70,7 @@ export const useCanvasStore = create(
                     })),
                     selectedNodeId: null,
                     selectedArrowId: null,
-                }));
+                }): state);
             },
 
             updateNodeText: (id: string, text: string) => {
