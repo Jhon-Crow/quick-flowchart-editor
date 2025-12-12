@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "start": "concurrently \"npm run dev\" \"npm run server\"",
     "dev": "vite --host --open",
     "build": "tsc -b && vite build",
     "lint": "eslint src --ext .ts,.tsx",
@@ -11,7 +12,8 @@
     "prettier": "prettier --check src",
     "prettier:fix": "prettier --write src",
     "format": "npm run prettier:fix && npm run lint:fix",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "server": "json-graphql-server server/db.cjs --port 4000"
   },
   "dependencies": {
     "@apollo/client": "^4.0.10",
