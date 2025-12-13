@@ -1,4 +1,4 @@
-# React + TypeScript + Vite
+# React + TypeScript + Vite <img align="right" style="margin:0.5rem" src="https://wakatime.com/badge/user/143ebe56-353b-4d0a-9042-421a5ed82bd4/project/e59531e1-85ab-4a59-a081-3cc6bf0c37ca.svg?style=plastic&label_color=FF66BD&color=27C6E6" alt="WakaTime-badge" />
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
@@ -52,3 +52,8 @@ export default tseslint.config({
   },
 })
 ```
+
+<br>
+<br>
+
+<img align="right" style="margin:0.5rem" src="https://visitor-badge.laobi.icu/badge?page_id=Jhon-Crow-quick-chart-project.visitor-badge&left_color=&right_color=" alt="Visitor-badge" />
