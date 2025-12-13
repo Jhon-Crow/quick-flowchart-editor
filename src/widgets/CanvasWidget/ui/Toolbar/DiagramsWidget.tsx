@@ -16,10 +16,22 @@ const DiagramsWidgetContainer = styled.div`
 
 export const DiagramsWidget = () => {
     const {data, error, loading} = useQuery(ALL_DIAGRAMS_TITLES);
-    const [removeDiagram, {error: removeError}] = useMutation(DELETE_DIAGRAM);
+    const [removeDiagram, {error: removeError}] = useMutation(DELETE_DIAGRAM, {
+        update(cache, { data: {removeDiagram} }) {
+            cache.modify({
+                fields: {
+                    allDiagrams(existingDiagrams = []) {
+                        return existingDiagrams.filter(diagram => diagram.__ref !== `Diagram:${removeDiagram.id}`);
+                    }
+                }
+            });
+        }
+    });
 
     // todo сделать функцию сохранения диаграмм
-    //  добавить инпут для названия диаграммы
+    //  добавить инпут для названия диаграммы при сохранении
+    //  добавить кнопку очистить хослт
+
     return (
         <DiagramsWidgetContainer>
             {loading && <Loader style={{borderTopColor: 'red'}} size={"lg"}/>}
@@ -38,7 +50,7 @@ export const DiagramsWidget = () => {
                             key={diagram.title + 'del' + diagram.id}
                             variant={'ghost'}
                             size={"sm"}
-                            onClick={() => removeDiagram({
+                            onClick={() => removeDiagram({ //todo вынести в handler
                                 variables: {
                                     id: diagram.id
                                 }
