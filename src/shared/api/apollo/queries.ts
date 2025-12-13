@@ -21,3 +21,13 @@ export const ALL_DIAGRAMS_TITLES = gql`
         }
     }
 `;
+
+export const GET_DIAGRAM_BY_ID = gql`
+query GetDiagram($id: ID!) {
+  Diagram(id: $id) {
+    arrows
+    nodes
+  }
+}
+
+`
