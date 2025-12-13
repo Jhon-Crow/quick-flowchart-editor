@@ -96,13 +96,14 @@ export const DiagramsWidget = () => {
                 value={titleInputValue}
                 onChange={handleInputChange}
                 onKeyDown={handleInputKeyDown}
-                hidden={!isTitleInputOpen}
                 style={{
+                    transition: 'all 0.24s ease-in',
+                    height: isTitleInputOpen ? '2rem' : '0',
                     width: '10rem',
                     backgroundColor: !titleInputValue.length ? 'red' : '#fff',
-                    padding: '4px 8px',
+                    padding: isTitleInputOpen ? '4px 8px' : '0',
                     borderRadius: '4px',
-                    border: '1px solid #ccc'
+                    border:  isTitleInputOpen ? '1px solid #ccc' : 'none'
                 }}
                 type={'text'}
                 placeholder="Введите название"
