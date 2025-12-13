@@ -8,3 +8,5 @@ export const DELETE_DIAGRAM = gql`
         }
     }
 `;
+
+//todo createDiagram
