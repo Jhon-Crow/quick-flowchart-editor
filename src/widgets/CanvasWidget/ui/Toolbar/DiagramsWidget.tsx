@@ -37,6 +37,11 @@ export const DiagramsWidget = () => {
         }))
     );
 
+    // todo гдето рассинхрон: если сразу после сохранения диаграммы попытаться ее загрузить, то отрисовывается не то состояние,
+    //  после перезагрузки загружается корректное
+    //  должно быть проблема в том, что при нажатии загрузки данные достаются из кэша
+    //  проверить кэш apollo
+
     const [createDiagram, {error: createError, loading: createLoading}] = useMutation(CREATE_DIAGRAM, {
         update(cache, {data: {newDiagram}}) {
             const {allDiagrams} = cache.readQuery({query: ALL_DIAGRAMS_TITLES});
@@ -46,7 +51,28 @@ export const DiagramsWidget = () => {
                 data: {
                     allDiagrams: [{...newDiagram, __typename: 'Diagram'}, ...allDiagrams]
                 }
-            })
+            });
+
+            cache.modify({
+                fields: {
+                    Diagram() {
+                        return newDiagram;
+                    }
+                }
+            });
+
+            // cache.writeQuery({
+            //     query: GET_DIAGRAM_BY_ID,
+            //     data: {Diagram: newDiagram}
+            // });
+
+            // cache.writeQuery({
+            //
+            //     fieldName: 'Diagram',
+            //     args: { id: removeDiagram.id },
+            // });
+
+
         }
     });
 
@@ -56,20 +82,43 @@ export const DiagramsWidget = () => {
         loading: diagramByIdLoading
     }] = useLazyQuery<DiagramByIdType>(GET_DIAGRAM_BY_ID);
 
-
     const [removeDiagram, {error: removeError, loading: removeLoading}] = useMutation(DELETE_DIAGRAM, {
         update(cache, {data: {removeDiagram}}) {
+            // 1. Удаляем из списка allDiagrams
             cache.modify({
                 fields: {
-                    allDiagrams(existingDiagrams = []) {
-                        return existingDiagrams.filter((diagram: {
-                            __ref: string
-                        }) => diagram.__ref !== `Diagram:${removeDiagram.id}`);
+                    allDiagrams(existingDiagrams = [], {readField}) {
+                        return existingDiagrams.filter((diagramRef) => {
+                            const diagramId = readField('id', diagramRef);
+                            return diagramId !== removeDiagram.id;
+                        });
                     }
                 }
             });
+
+            // 2. Удаляем саму диаграмму из кэша
+            const diagramId = cache.identify({
+                __typename: 'Diagram',
+                id: removeDiagram.id
+            });
+
+            if (diagramId) {
+                cache.evict({id: diagramId});
+            }
+
+            // 3. Удаляем запрос Diagram({"id":"..."}) из ROOT_QUERY
+            // Это критически важно, так как эта запись остается в кэше
+            cache.evict({
+                fieldName: 'Diagram',
+                args: {id: removeDiagram.id},
+            });
+
+            // 4. Принудительно обновляем кэш
+            cache.gc();
         }
     });
+
+
     const inputRef = useRef<HTMLInputElement | null>(null);
     const [titleInputValue, setTitleInputValue] = useState<string>('');
     const [isTitleInputOpen, setIsTitleInputOpen] = useState<boolean>(false);
