@@ -11,7 +11,7 @@ export const useCanvasStore = create(
             selectedArrowId: null,
 
             loadDiagram: (nodes: CanvasNodeType[], arrows: CanvasArrowType[]) => {
-                set((state) => ({
+                set(() => ({
                     nodes: nodes.map((node) => ({
                         ...node,
                         isSelected: false,

@@ -37,7 +37,7 @@ export const DiagramsWidget = () => {
         }))
     );
 
-    const [createDiagram, {error: createError}] = useMutation(CREATE_DIAGRAM, {
+    const [createDiagram, {error: createError, loading: createLoading}] = useMutation(CREATE_DIAGRAM, {
         update(cache, {data: {newDiagram}}) {
             const {allDiagrams} = cache.readQuery({query: ALL_DIAGRAMS_TITLES});
 
@@ -52,14 +52,12 @@ export const DiagramsWidget = () => {
 
     const {data, error, loading} = useQuery<AllDiagramsTitlesType>(ALL_DIAGRAMS_TITLES);
     const [getDiagramById, {
-        data: diagramByIdData,
         error: diagramByIdError,
         loading: diagramByIdLoading
     }] = useLazyQuery<DiagramByIdType>(GET_DIAGRAM_BY_ID);
 
 
-
-    const [removeDiagram, {error: removeError}] = useMutation(DELETE_DIAGRAM, {
+    const [removeDiagram, {error: removeError, loading: removeLoading}] = useMutation(DELETE_DIAGRAM, {
         update(cache, {data: {removeDiagram}}) {
             cache.modify({
                 fields: {
@@ -119,13 +117,12 @@ export const DiagramsWidget = () => {
 
     const handleLoadDiagram = async (id: string) => {
         try {
-            const { data } = await getDiagramById({
-                variables: { id }
+            const {data} = await getDiagramById({
+                variables: {id}
             });
 
             if (data?.Diagram) {
                 loadDiagram(data.Diagram.nodes, data.Diagram.arrows);
-                console.log('Diagram loaded successfully:', data.Diagram.title); //todo удалить
             } else {
                 console.error('Diagram not found');
             }
@@ -136,10 +133,14 @@ export const DiagramsWidget = () => {
 
     return (
         <DiagramsWidgetContainer>
-            {loading && <Loader style={{borderTopColor: 'red'}} size={"lg"}/>}
+            {loading || diagramByIdLoading || createLoading || removeLoading &&
+                <Loader style={{borderTopColor: loading || removeLoading ? 'red' : '#25cb13'}} size={"lg"}/>}
+
             {error && <p style={{color: 'red'}}>{error.message}</p>}
             {removeError && <p style={{color: 'red'}}>{removeError.message}</p>}
             {createError && <p style={{color: 'red'}}>{createError.message}</p>}
+            {diagramByIdError && <p style={{color: 'red'}}>{diagramByIdError.message}</p>}
+            {/*todo отрефакторить, сделать errorList*/}
             <div style={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -156,7 +157,7 @@ export const DiagramsWidget = () => {
                             onClick={() => handleDeleteDiagram(diagram.id)}
                         >❌</Button>
                         <Button
-                            onClick={()=>handleLoadDiagram(diagram.id)}
+                            onClick={() => handleLoadDiagram(diagram.id)}
                             key={diagram.id + 'diagram' + diagram.title}
                         >
                             {diagram.title}
