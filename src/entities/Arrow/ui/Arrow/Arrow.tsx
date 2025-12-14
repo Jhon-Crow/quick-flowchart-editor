@@ -38,7 +38,7 @@ export const Arrow = memo( ({arrow}: ArrowProps) => {
         if (targetNode!.y < sourceNode!.y) return targetNode!.y + targetNode!.height / 1.5;
         if (targetNode!.y > sourceNode!.y) return targetNode!.y + targetNode!.height / 4;
     }
-    // Координаты центров узлов
+
     const x1 = countSourceX();
     const y1 = countSourceY();
     const x2 = countTargetX();

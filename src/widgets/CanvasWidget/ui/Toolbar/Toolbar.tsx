@@ -4,6 +4,7 @@ import {useCanvasStore} from "@/entities/Node";
 import {Button} from "@/shared/Button";
 import React, {memo, useCallback, useEffect, useRef, useState} from "react";
 import {useShallow} from "zustand/react/shallow";
+import {DiagramsWidget} from "@/widgets/CanvasWidget/ui/Toolbar/DiagramsWidget.tsx";
 
 const ToolbarComponent = () => {
     const {
@@ -117,6 +118,9 @@ const ToolbarComponent = () => {
 
                 <input
                     onKeyDown={(e) => {
+                        if (e.key === 'Delete' || e.key === 'Backspace') {
+                           e.stopPropagation();
+                        }
                         if (e.key === 'Enter') {
                             handleEditNodeText();
                         }
@@ -138,6 +142,7 @@ const ToolbarComponent = () => {
                 >
                     🗑 Удалить
                 </Button>
+                <DiagramsWidget/>
             </ToolbarSection>
 
             <InfoPanel>

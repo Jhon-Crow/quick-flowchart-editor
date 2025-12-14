@@ -13,7 +13,7 @@ export const CanvasNode = ({node}: NodeProps) => {
     const selectNode = useCanvasStore((state) => state.selectNode);
     const updateNodePosition = useCanvasStore((state) => state.updateNodePosition);
 
-    const handleClick = (e: React.MouseEvent) => {
+    const handleClick = (e: MouseEvent) => {
         e.stopPropagation();
         selectNode(node.id);
     };
@@ -36,8 +36,8 @@ export const CanvasNode = ({node}: NodeProps) => {
     }), [node.id, node.x, node.y]);
 
     return (
+        // @ts-expect-error: react-dnd ref type conflict
         <StyledNode
-            // @ts-expect-error: react-dnd ref type conflict
             ref={dragRef}
             isDragging={isDragging}
             type={node.type}

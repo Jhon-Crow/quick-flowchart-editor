@@ -1,4 +1,3 @@
-// src/shared/ui/Button/styles.ts
 import styled, {css, keyframes} from 'styled-components';
 import type {ButtonSize, ButtonVariant} from './types.ts';
 
