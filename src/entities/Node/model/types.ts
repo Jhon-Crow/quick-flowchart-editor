@@ -19,7 +19,6 @@ export interface CanvasArrowType {
     type: ArrowType;
 }
 
-// Определите отдельно тип состояния (только данные)
 interface CanvasState {
     nodes: CanvasNodeType[];
     arrows: CanvasArrowType[];
@@ -27,7 +26,6 @@ interface CanvasState {
     selectedArrowId: string | null;
 }
 
-// Определите тип действий отдельно
 interface CanvasActions {
     loadDiagram: (nodes: CanvasNodeType[], arrows: CanvasArrowType[]) => void;
     addNode: (type: NodeType, x: number, y: number) => void;
@@ -44,5 +42,4 @@ interface CanvasActions {
     updateArrowTarget: (id: string, targetId: string) => void;
 }
 
-// Объедините типы для хранилища
 export type CanvasStore = CanvasState & CanvasActions;

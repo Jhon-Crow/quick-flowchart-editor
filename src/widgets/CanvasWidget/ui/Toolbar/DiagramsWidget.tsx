@@ -58,19 +58,6 @@ export const DiagramsWidget = () => {
                     }
                 }
             });
-
-            // cache.writeQuery({
-            //     query: GET_DIAGRAM_BY_ID,
-            //     data: {Diagram: newDiagram}
-            // });
-
-            // cache.writeQuery({
-            //
-            //     fieldName: 'Diagram',
-            //     args: { id: removeDiagram.id },
-            // });
-
-
         }
     });
 
