@@ -37,11 +37,6 @@ export const DiagramsWidget = () => {
         }))
     );
 
-    // todo гдето рассинхрон: если сразу после сохранения диаграммы попытаться ее загрузить, то отрисовывается не то состояние,
-    //  после перезагрузки загружается корректное
-    //  должно быть проблема в том, что при нажатии загрузки данные достаются из кэша
-    //  проверить кэш apollo
-
     const [createDiagram, {error: createError, loading: createLoading}] = useMutation(CREATE_DIAGRAM, {
         update(cache, {data: {newDiagram}}) {
             const {allDiagrams} = cache.readQuery({query: ALL_DIAGRAMS_TITLES});
