@@ -1,9 +1,11 @@
 import styled from 'styled-components';
 import {useMutation, useQuery} from "@apollo/client/react";
-import {ALL_DIAGRAMS_TITLES, DELETE_DIAGRAM} from "@/shared/api";
+import {ALL_DIAGRAMS_TITLES, CREATE_DIAGRAM, DELETE_DIAGRAM} from "@/shared/api";
 import {Button, Loader} from "@/shared/Button";
-import {useState} from "react";
+import {useRef, useState} from "react";
 import type {DiagramType} from "@/entities/Diagram";
+import {useCanvasStore} from "@/entities/Node";
+import {useShallow} from "zustand/react/shallow";
 
 const DiagramsWidgetContainer = styled.div`
   position: absolute;
@@ -17,6 +19,42 @@ const DiagramsWidgetContainer = styled.div`
 `;
 
 export const DiagramsWidget = () => {
+    const {
+        addNode,
+        updateNodeText,
+        deleteNode,
+        selectedNodeId,
+        clearSelection,
+        nodes,
+        addArrow,
+        arrows
+    } = useCanvasStore(
+        useShallow((state) => ({
+            addNode: state.addNode,
+            updateNodeText: state.updateNodeText,
+            deleteNode: state.deleteNode,
+            selectedNodeId: state.selectedNodeId,
+            clearSelection: state.clearSelection,
+            nodes: state.nodes,
+            addArrow: state.addArrow,
+            arrows: state.arrows,
+        }))
+    );
+
+    const [createDiagram, {error: createError}] = useMutation(CREATE_DIAGRAM, {
+        update(cache, {data: {newDiagram}}) {
+            const {allDiagrams} = cache.readQuery({query: ALL_DIAGRAMS_TITLES});
+
+            cache.writeQuery({
+                query: ALL_DIAGRAMS_TITLES,
+                data: {
+                    allDiagrams: [{ ...newDiagram, __typename: 'Diagram' }, ...allDiagrams]
+                }
+            })
+        }
+    });
+
+    const inputRef = useRef<HTMLInputElement | null>(null);
     const [titleInputValue, setTitleInputValue] = useState<string>('');
     const [isTitleInputOpen, setIsTitleInputOpen] = useState<boolean>(false);
     const {data, error, loading} = useQuery(ALL_DIAGRAMS_TITLES);
@@ -25,7 +63,9 @@ export const DiagramsWidget = () => {
             cache.modify({
                 fields: {
                     allDiagrams(existingDiagrams = []) {
-                        return existingDiagrams.filter((diagram: {__ref: string}) => diagram.__ref !== `Diagram:${removeDiagram.id}`);
+                        return existingDiagrams.filter((diagram: {
+                            __ref: string
+                        }) => diagram.__ref !== `Diagram:${removeDiagram.id}`);
                     }
                 }
             });
@@ -39,18 +79,26 @@ export const DiagramsWidget = () => {
     const handleSaveButtonClick = () => {
         if (!isTitleInputOpen) {
             setIsTitleInputOpen(true);
+            clearSelection();
+            if (inputRef.current) inputRef.current.focus();
         } else if (titleInputValue.trim()) {
             handleSaveDiagram();
+            if (inputRef.current) inputRef.current.blur();
         }
     };
 
     const handleSaveDiagram = () => {
-        console.log('Сохранение диаграммы с названием:', titleInputValue);
-        setTitleInputValue('');
         setIsTitleInputOpen(false);
-
-        // Здесь будет
-        //todo вызов мутации для сохранения
+        if (nodes.length && titleInputValue.length) createDiagram({
+            variables: {
+                title: titleInputValue,
+                nodes: JSON.stringify(nodes),
+                arrows: JSON.stringify(arrows) || '[]',
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            }
+        });
+        setTitleInputValue('');
     };
 
     const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -70,6 +118,7 @@ export const DiagramsWidget = () => {
             {loading && <Loader style={{borderTopColor: 'red'}} size={"lg"}/>}
             {error && <p style={{color: 'red'}}>{error.message}</p>}
             {removeError && <p style={{color: 'red'}}>{removeError.message}</p>}
+            {createError && <p style={{color: 'red'}}>{createError.message}</p>}
             <div style={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -93,6 +142,7 @@ export const DiagramsWidget = () => {
                 )}
             </div>
             <input
+                ref={inputRef}
                 value={titleInputValue}
                 onChange={handleInputChange}
                 onKeyDown={handleInputKeyDown}
@@ -103,7 +153,7 @@ export const DiagramsWidget = () => {
                     backgroundColor: !titleInputValue.length ? 'red' : '#fff',
                     padding: isTitleInputOpen ? '4px 8px' : '0',
                     borderRadius: '4px',
-                    border:  isTitleInputOpen ? '1px solid #ccc' : 'none'
+                    border: isTitleInputOpen ? '1px solid #ccc' : 'none'
                 }}
                 type={'text'}
                 placeholder="Введите название"

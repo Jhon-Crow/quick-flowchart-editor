@@ -29,5 +29,4 @@ query GetDiagram($id: ID!) {
     nodes
   }
 }
-
 `
