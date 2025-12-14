@@ -1,9 +1,9 @@
 import styled from 'styled-components';
-import {useMutation, useQuery} from "@apollo/client/react";
-import {ALL_DIAGRAMS_TITLES, CREATE_DIAGRAM, DELETE_DIAGRAM} from "@/shared/api";
+import {useLazyQuery, useMutation, useQuery} from "@apollo/client/react";
+import type {AllDiagramsTitlesType, DiagramByIdType} from "@/shared/api";
+import {ALL_DIAGRAMS_TITLES, CREATE_DIAGRAM, DELETE_DIAGRAM, GET_DIAGRAM_BY_ID} from "@/shared/api";
 import {Button, Loader} from "@/shared/Button";
 import {useRef, useState} from "react";
-import type {DiagramType} from "@/entities/Diagram";
 import {useCanvasStore} from "@/entities/Node";
 import {useShallow} from "zustand/react/shallow";
 
@@ -18,25 +18,21 @@ const DiagramsWidgetContainer = styled.div`
   z-index: 999;
 `;
 
+// todo обязательно отрефакторить
 export const DiagramsWidget = () => {
     const {
-        addNode,
-        updateNodeText,
-        deleteNode,
-        selectedNodeId,
+        loadDiagram,
         clearSelection,
         nodes,
-        addArrow,
         arrows
     } = useCanvasStore(
         useShallow((state) => ({
-            addNode: state.addNode,
+            loadDiagram: state.loadDiagram,
             updateNodeText: state.updateNodeText,
             deleteNode: state.deleteNode,
             selectedNodeId: state.selectedNodeId,
             clearSelection: state.clearSelection,
             nodes: state.nodes,
-            addArrow: state.addArrow,
             arrows: state.arrows,
         }))
     );
@@ -48,16 +44,21 @@ export const DiagramsWidget = () => {
             cache.writeQuery({
                 query: ALL_DIAGRAMS_TITLES,
                 data: {
-                    allDiagrams: [{ ...newDiagram, __typename: 'Diagram' }, ...allDiagrams]
+                    allDiagrams: [{...newDiagram, __typename: 'Diagram'}, ...allDiagrams]
                 }
             })
         }
     });
 
-    const inputRef = useRef<HTMLInputElement | null>(null);
-    const [titleInputValue, setTitleInputValue] = useState<string>('');
-    const [isTitleInputOpen, setIsTitleInputOpen] = useState<boolean>(false);
-    const {data, error, loading} = useQuery(ALL_DIAGRAMS_TITLES);
+    const {data, error, loading} = useQuery<AllDiagramsTitlesType>(ALL_DIAGRAMS_TITLES);
+    const [getDiagramById, {
+        data: diagramByIdData,
+        error: diagramByIdError,
+        loading: diagramByIdLoading
+    }] = useLazyQuery<DiagramByIdType>(GET_DIAGRAM_BY_ID);
+
+
+
     const [removeDiagram, {error: removeError}] = useMutation(DELETE_DIAGRAM, {
         update(cache, {data: {removeDiagram}}) {
             cache.modify({
@@ -71,6 +72,9 @@ export const DiagramsWidget = () => {
             });
         }
     });
+    const inputRef = useRef<HTMLInputElement | null>(null);
+    const [titleInputValue, setTitleInputValue] = useState<string>('');
+    const [isTitleInputOpen, setIsTitleInputOpen] = useState<boolean>(false);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setTitleInputValue(e.target.value);
@@ -92,8 +96,8 @@ export const DiagramsWidget = () => {
         if (nodes.length && titleInputValue.length) createDiagram({
             variables: {
                 title: titleInputValue,
-                nodes: JSON.stringify(nodes),
-                arrows: JSON.stringify(arrows) || '[]',
+                nodes: nodes,
+                arrows: arrows || [],
                 createdAt: new Date().toISOString(),
                 updatedAt: new Date().toISOString()
             }
@@ -113,6 +117,23 @@ export const DiagramsWidget = () => {
         });
     };
 
+    const handleLoadDiagram = async (id: string) => {
+        try {
+            const { data } = await getDiagramById({
+                variables: { id }
+            });
+
+            if (data?.Diagram) {
+                loadDiagram(data.Diagram.nodes, data.Diagram.arrows);
+                console.log('Diagram loaded successfully:', data.Diagram.title); //todo удалить
+            } else {
+                console.error('Diagram not found');
+            }
+        } catch (error) {
+            console.error('Error loading diagram:', error);
+        }
+    };
+
     return (
         <DiagramsWidgetContainer>
             {loading && <Loader style={{borderTopColor: 'red'}} size={"lg"}/>}
@@ -125,17 +146,19 @@ export const DiagramsWidget = () => {
                 alignItems: 'start',
                 gap: '.2rem'
             }}>
-                {data && data?.allDiagrams.map((diagram: DiagramType) =>
+                {data && data?.allDiagrams.map((diagram) =>
                     (<div key={diagram.title + 'del' + diagram.id}
                           style={{display: 'flex', alignItems: 'center', gap: '.2rem'}}>
                         <Button
                             style={{minWidth: '1.2rem', padding: 0, height: '1.2rem'}}
-
                             variant={'ghost'}
                             size={"sm"}
                             onClick={() => handleDeleteDiagram(diagram.id)}
                         >❌</Button>
-                        <Button key={diagram.id + 'diagram' + diagram.title}>
+                        <Button
+                            onClick={()=>handleLoadDiagram(diagram.id)}
+                            key={diagram.id + 'diagram' + diagram.title}
+                        >
                             {diagram.title}
                         </Button>
                     </div>)

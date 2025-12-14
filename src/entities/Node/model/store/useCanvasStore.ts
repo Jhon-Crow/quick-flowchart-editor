@@ -10,6 +10,21 @@ export const useCanvasStore = create(
             selectedNodeId: null,
             selectedArrowId: null,
 
+            loadDiagram: (nodes: CanvasNodeType[], arrows: CanvasArrowType[]) => {
+                set((state) => ({
+                    nodes: nodes.map((node) => ({
+                        ...node,
+                        isSelected: false,
+                    })),
+                    arrows: arrows.map((arrow) => ({
+                        ...arrow,
+                        isSelected: false,
+                    })),
+                    selectedNodeId: null,
+                    selectedArrowId: null,
+                }));
+            },
+
             addNode: (type: NodeType, x: number, y: number) => {
                 const newNode: CanvasNodeType = {
                     id: `node-${crypto.randomUUID()}`,

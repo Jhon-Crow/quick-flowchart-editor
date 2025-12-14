@@ -118,6 +118,9 @@ const ToolbarComponent = () => {
 
                 <input
                     onKeyDown={(e) => {
+                        if (e.key === 'Delete' || e.key === 'Backspace') {
+                           e.stopPropagation();
+                        }
                         if (e.key === 'Enter') {
                             handleEditNodeText();
                         }
