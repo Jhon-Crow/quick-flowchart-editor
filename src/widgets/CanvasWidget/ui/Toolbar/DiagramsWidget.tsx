@@ -3,6 +3,7 @@ import {useLazyQuery, useMutation, useQuery} from "@apollo/client/react";
 import type {AllDiagramsTitlesType, DiagramByIdType} from "@/shared/api";
 import {ALL_DIAGRAMS_TITLES, CREATE_DIAGRAM, DELETE_DIAGRAM, GET_DIAGRAM_BY_ID} from "@/shared/api";
 import {Button, Loader} from "@/shared/Button";
+import type {ChangeEvent, KeyboardEvent} from "react";
 import {useRef, useState} from "react";
 import {useCanvasStore} from "@/entities/Node";
 import {useShallow} from "zustand/react/shallow";
@@ -121,7 +122,7 @@ export const DiagramsWidget = () => {
     const [titleInputValue, setTitleInputValue] = useState<string>('');
     const [isTitleInputOpen, setIsTitleInputOpen] = useState<boolean>(false);
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         setTitleInputValue(e.target.value);
     };
 
@@ -150,7 +151,7 @@ export const DiagramsWidget = () => {
         setTitleInputValue('');
     };
 
-    const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const handleInputKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter' && titleInputValue.trim()) {
             handleSaveDiagram();
         }
