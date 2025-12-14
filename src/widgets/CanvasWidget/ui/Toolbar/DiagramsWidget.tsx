@@ -6,6 +6,7 @@ import {Button, Loader} from "@/shared/Button";
 import {useRef, useState} from "react";
 import {useCanvasStore} from "@/entities/Node";
 import {useShallow} from "zustand/react/shallow";
+import type {Reference} from "@apollo/client";
 
 const DiagramsWidgetContainer = styled.div`
   position: absolute;
@@ -38,8 +39,9 @@ export const DiagramsWidget = () => {
     );
 
     const [createDiagram, {error: createError, loading: createLoading}] = useMutation(CREATE_DIAGRAM, {
+        //@ts-expect-error expected unknown
         update(cache, {data: {newDiagram}}) {
-            const {allDiagrams} = cache.readQuery({query: ALL_DIAGRAMS_TITLES});
+            const {allDiagrams} = cache.readQuery({query: ALL_DIAGRAMS_TITLES}) as AllDiagramsTitlesType;
 
             cache.writeQuery({
                 query: ALL_DIAGRAMS_TITLES,
@@ -78,12 +80,13 @@ export const DiagramsWidget = () => {
     }] = useLazyQuery<DiagramByIdType>(GET_DIAGRAM_BY_ID);
 
     const [removeDiagram, {error: removeError, loading: removeLoading}] = useMutation(DELETE_DIAGRAM, {
+        //@ts-expect-error expected unknown
         update(cache, {data: {removeDiagram}}) {
             // 1. Удаляем из списка allDiagrams
             cache.modify({
                 fields: {
                     allDiagrams(existingDiagrams = [], {readField}) {
-                        return existingDiagrams.filter((diagramRef) => {
+                        return existingDiagrams.filter((diagramRef: Reference) => {
                             const diagramId = readField('id', diagramRef);
                             return diagramId !== removeDiagram.id;
                         });
