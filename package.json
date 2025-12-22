@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "concurrently \"npm run dev\" \"npm run server\"",
+    "deploy": "concurrently \"npm run build\" \"npm run server\"",
     "dev": "vite --host --open",
     "build": "tsc -b && vite build",
     "lint": "eslint src --ext .ts,.tsx",
