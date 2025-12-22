@@ -2,12 +2,14 @@ import styled from 'styled-components';
 import {useLazyQuery, useMutation, useQuery} from "@apollo/client/react";
 import type {AllDiagramsTitlesType, DiagramByIdType} from "@/shared/api";
 import {ALL_DIAGRAMS_TITLES, CREATE_DIAGRAM, DELETE_DIAGRAM, GET_DIAGRAM_BY_ID} from "@/shared/api";
-import {Button, Loader} from "@/shared/Button";
+import {Button} from "@/shared/Button";
 import type {ChangeEvent, KeyboardEvent} from "react";
 import {useRef, useState} from "react";
 import {useCanvasStore} from "@/entities/Node";
 import {useShallow} from "zustand/react/shallow";
 import type {Reference} from "@apollo/client";
+import {ErrorsList} from "@/widgets/CanvasWidget/ui/Toolbar/DiagramsWidget/ErrorsList.tsx";
+import {LoadersList} from "@/widgets/CanvasWidget/ui/Toolbar/DiagramsWidget/LoadersList.tsx";
 
 const DiagramsWidgetContainer = styled.div`
   position: absolute;
@@ -20,7 +22,6 @@ const DiagramsWidgetContainer = styled.div`
   z-index: 999;
 `;
 
-// todo обязательно отрефакторить
 export const DiagramsWidget = () => {
     const {
         loadDiagram,
@@ -168,14 +169,16 @@ export const DiagramsWidget = () => {
 
     return (
         <DiagramsWidgetContainer>
-            {loading || diagramByIdLoading || createLoading || removeLoading &&
-                <Loader style={{borderTopColor: loading || removeLoading ? 'red' : '#25cb13'}} size={"lg"}/>}
+            <LoadersList loadings={
+                [
+                    {loading: loading, color: 'red'},
+                    {loading: removeLoading, color: 'red'},
+                    {loading: createLoading, color: '#25cb13'},
+                    {loading: diagramByIdLoading, color: '#25cb13'}
+                ]
+            }/>
+            <ErrorsList errors={[error, removeError, createError, diagramByIdError]}/>
 
-            {error && <p style={{color: 'red'}}>{error.message}</p>}
-            {removeError && <p style={{color: 'red'}}>{removeError.message}</p>}
-            {createError && <p style={{color: 'red'}}>{createError.message}</p>}
-            {diagramByIdError && <p style={{color: 'red'}}>{diagramByIdError.message}</p>}
-            {/*todo отрефакторить, сделать errorList*/}
             <div style={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -226,5 +229,6 @@ export const DiagramsWidget = () => {
                 Save Diagram in DB
             </Button>
         </DiagramsWidgetContainer>
-    );
+    )
+        ;
 };

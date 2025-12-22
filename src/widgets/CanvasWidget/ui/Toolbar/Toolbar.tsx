@@ -4,7 +4,7 @@ import {useCanvasStore} from "@/entities/Node";
 import {Button} from "@/shared/Button";
 import React, {memo, useCallback, useEffect, useRef, useState} from "react";
 import {useShallow} from "zustand/react/shallow";
-import {DiagramsWidget} from "@/widgets/CanvasWidget/ui/Toolbar/DiagramsWidget.tsx";
+import {DiagramsWidget} from "@/widgets/CanvasWidget/ui/Toolbar/DiagramsWidget/DiagramsWidget.tsx";
 
 const ToolbarComponent = () => {
     const {
