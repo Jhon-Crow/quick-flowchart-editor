@@ -7,6 +7,20 @@ Currently, two official plugins are available:
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
+## Technologies Used
+
+This project is built using the following technologies:
+
+- **React**: A JavaScript library for building user interfaces.
+- **TypeScript**: A typed superset of JavaScript that compiles to plain JavaScript.
+- **Vite**: A build tool that provides fast development and hot module replacement (HMR).
+- **ESLint**: A pluggable linting utility for identifying and reporting on patterns in JavaScript.
+- **Styled Components**: A CSS-in-JS library that allows you to write actual CSS in your JavaScript files.
+- **Apollo**: A GraphQL client for React that provides a simple and powerful way to manage data in your application.
+- **React DND**: A drag and drop library for React that makes it easy to create drag and drop interfaces.
+- **Zustand**: A state management solution that is lightweight and easy to use.
+
+
 ## Expanding the ESLint configuration
 
 If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
