@@ -12,7 +12,7 @@ import {ErrorsList} from "./ErrorsList.tsx";
 import {LoadersList} from "./LoadersList.tsx";
 
 const DiagramsWidgetContainer = styled.div`
-  position: absolute;
+  position: fixed;
   display: flex;
   flex-direction: column;
   align-items: center;

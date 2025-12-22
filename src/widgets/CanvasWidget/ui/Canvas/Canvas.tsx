@@ -43,7 +43,7 @@ const StyledCanvas = styled.div`
   background: ${({theme}) => theme.colors.background};
   min-height: 600px;
   cursor: default;
-  overflow: hidden;
+  overflow: auto;
 `;
 
 export const Canvas = memo(CanvasComponent);

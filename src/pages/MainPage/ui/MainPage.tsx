@@ -27,7 +27,7 @@ export const MainPage = () => {
 const PageContainer = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  min-height: 100vh;
   padding: 20px;
   background: ${({theme}) => theme.colors.background};
 `;

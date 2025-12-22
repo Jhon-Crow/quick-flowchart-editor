@@ -30,7 +30,6 @@ const DiagramsWidget = lazy(() => import('./DiagramsWidget/DiagramsWidget'));
             <Canvas/>
         </WidgetContainer>
     )
-        ;
 });
 
 const WidgetContainer = styled.div`
