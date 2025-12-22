@@ -1,10 +1,14 @@
-function App() {
+import {AppProviders} from "./providers/AppProviders.tsx";
+import {MainPage} from "@/pages/MainPage";
 
-  return (
-    <>
-        App
-    </>
-  )
+function App() {
+    return (
+        <>
+            <AppProviders>
+                <MainPage/>
+            </AppProviders>
+        </>
+    )
 }
 
 export default App

@@ -1,0 +1,44 @@
+import React, {memo} from 'react';
+import type {ButtonProps} from './types.ts';
+import {ButtonContent, Loader, StyledButton} from './styles.ts';
+
+export const Button = memo( React.forwardRef<HTMLButtonElement, ButtonProps>(
+    (
+        {
+            children,
+            variant = 'primary',
+            size = 'md',
+            isLoading = false,
+            isActive = false,
+            fullWidth = false,
+            disabled,
+            className,
+            type = 'button',
+            ...props
+        },
+        ref
+    ) => {
+        const isDisabled = disabled || isLoading;
+
+        return (
+            <StyledButton
+                ref={ref}
+                type={type}
+                variant={variant}
+                size={size}
+                disabled={isDisabled}
+                isLoading={isLoading}
+                isActive={isActive}
+                fullWidth={fullWidth}
+                className={className}
+                aria-busy={isLoading}
+                {...props}
+            >
+                {isLoading && <Loader size={size} />}
+                <ButtonContent isLoading={isLoading}>{children}</ButtonContent>
+            </StyledButton>
+        );
+    }
+) );
+
+Button.displayName = 'Button';
