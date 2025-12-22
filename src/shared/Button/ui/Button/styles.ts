@@ -138,8 +138,8 @@ interface LoaderProps {
 }
 
 export const Loader = styled.div<LoaderProps>`
-  width: ${({ size }) => (size === 'sm' ? '12px' : size === 'md' ? '16px' : '20px')};
-  height: ${({ size }) => (size === 'sm' ? '12px' : size === 'md' ? '16px' : '20px')};
+  width: ${({ size }) => (size === 'sm' ? '12px' : size === 'md' ? '20px' : '40px')};
+  height: ${({ size }) => (size === 'sm' ? '12px' : size === 'md' ? '20px' : '40px')};
   border: 2px solid rgba(255, 255, 255, 0.3);
   border-top: 2px solid white;
   border-radius: 50%;

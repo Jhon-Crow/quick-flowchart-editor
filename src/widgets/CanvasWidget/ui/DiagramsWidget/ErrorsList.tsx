@@ -5,8 +5,8 @@ export const ErrorsList = ({errors}: { errors: Array<ErrorLike | undefined> }) =
         <>
             {
                 errors.map(
-                    error => error?.message ?
-                        <p style={{color: 'red'}}>{error.message}</p>
+                    ( error, index ) => error?.message ?
+                        <p key={index + error.message + 'errorlist-item'} style={{color: 'red'}}>{error.message}</p>
                         : null
                 )
             }

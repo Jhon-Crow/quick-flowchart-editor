@@ -5,7 +5,7 @@ export const LoadersList = ({loadings}: { loadings: Array<{ loading: boolean, co
         <>
             {
                 loadings.map(
-                    ({loading, color}) => loading && <Loader style={{borderTopColor: color, marginLeft: '1rem'}} size={"lg"}/>
+                    ({loading, color}, index) => loading && <Loader key={index + color + 'loaderlist-item'} style={{borderTopColor: color, marginLeft: '1rem'}} size={"lg"}/>
                 )}
 
         </>

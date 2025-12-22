@@ -1,12 +1,25 @@
 import styled from 'styled-components';
-import {CanvasWidget} from "@/widgets/CanvasWidget";
+import {lazy, Suspense} from "react";
+import {Loader} from "@/shared/Button";
+// import {CanvasWidget} from "@/widgets/CanvasWidget";
+const CanvasWidget = lazy(() => import('@/widgets/CanvasWidget'));
 
 export const MainPage = () => {
     return (
         <PageContainer>
             <Title>QuickChart — минималистичный конструктор схем</Title>
             <Subtitle>Добавляйте элементы, перетаскивайте их, выбирайте и удаляйте</Subtitle>
-            <CanvasWidget/>
+            <Suspense fallback={
+                <Loader style={{
+                    borderTopColor: 'red',
+                    marginLeft: '1rem',
+                    position: 'fixed',
+                    top: '50%',
+                    left: '50%',
+                }} size={"lg"}/>
+            }>
+                <CanvasWidget/>
+            </Suspense>
         </PageContainer>
     );
 };

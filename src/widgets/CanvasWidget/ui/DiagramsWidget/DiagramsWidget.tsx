@@ -8,8 +8,8 @@ import {useRef, useState} from "react";
 import {useCanvasStore} from "@/entities/Node";
 import {useShallow} from "zustand/react/shallow";
 import type {Reference} from "@apollo/client";
-import {ErrorsList} from "@/widgets/CanvasWidget/ui/Toolbar/DiagramsWidget/ErrorsList.tsx";
-import {LoadersList} from "@/widgets/CanvasWidget/ui/Toolbar/DiagramsWidget/LoadersList.tsx";
+import {ErrorsList} from "./ErrorsList.tsx";
+import {LoadersList} from "./LoadersList.tsx";
 
 const DiagramsWidgetContainer = styled.div`
   position: absolute;
@@ -22,7 +22,7 @@ const DiagramsWidgetContainer = styled.div`
   z-index: 999;
 `;
 
-export const DiagramsWidget = () => {
+const DiagramsWidget = () => {
     const {
         loadDiagram,
         clearSelection,
@@ -171,7 +171,7 @@ export const DiagramsWidget = () => {
         <DiagramsWidgetContainer>
             <LoadersList loadings={
                 [
-                    {loading: loading, color: 'red'},
+                    {loading: loading, color: '#25cb13'},
                     {loading: removeLoading, color: 'red'},
                     {loading: createLoading, color: '#25cb13'},
                     {loading: diagramByIdLoading, color: '#25cb13'}
@@ -230,5 +230,6 @@ export const DiagramsWidget = () => {
             </Button>
         </DiagramsWidgetContainer>
     )
-        ;
 };
+
+export default DiagramsWidget;

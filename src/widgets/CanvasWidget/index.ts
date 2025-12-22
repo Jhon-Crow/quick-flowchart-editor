@@ -1,1 +1,1 @@
-export { CanvasWidget } from './ui/CanvasWidget';
+export {default} from './ui/CanvasWidget';
